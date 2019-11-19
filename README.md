@@ -1,4 +1,5 @@
 # Object With Csv - Pimcore Extension
+
 Facilitates user to upload csv file for bulk attaching to objects datatype using csv upload functionality.
 
 ![DataObject Edit Form](/Docs/images/form.png "Dataobject Edit Form")
@@ -8,27 +9,32 @@ Facilitates user to upload csv file for bulk attaching to objects datatype using
 # Installation
 
 ## Prerequisite
+
 Requires **pimcore > 5.0** and **pimcore < 5.6**
 
 ### Step 1
-* Run `composer require `
 
+- Run `composer require sndsabin/PimcoreObjectsWithCsv`
 
 ### Step 2
-* Enable the `ObjectWithCsvBundle` Extension
+
+- Enable the `ObjectWithCsvBundle` Extension
+
 ```php
     bin/console pimcore:bundle:enable ObjectsWithCsvBundle
 ```
 
 ### Step 3
-* Then `objectWithCsv` would be available in field selector under Relations (Add Data Component -> Relation -> objectsWithCsv)
+
+- Then `objectWithCsv` would be available in field selector under Relations (Add Data Component -> Relation -> objectsWithCsv)
 
 ![objectWithCsv](/Docs/images/data-type.png "objectWithCsv")
 
-# Sample CSV 
+# Sample CSV
 
 ### Example Scenario
-Multiple products are to be attached to category in pimcore. 
+
+Multiple products are to be attached to category in pimcore.
 
 **Product** Dataobject
 
@@ -40,7 +46,7 @@ where `sku` is the unique identifier to identify the `product` objects.
 
 ![product-dataobject](/Docs/images/category.png "Category DataObject")
 
-and the Edit form for Category Objects 
+and the Edit form for Category Objects
 
 ![DataObject Edit Form](/Docs/images/form.png "Dataobject Edit Form")
 
@@ -56,4 +62,3 @@ sku
 44444444
 4zfd5698
 ```
-
