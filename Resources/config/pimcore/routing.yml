@@ -1,0 +1,5 @@
+objects_with_csv:
+    resource: "@ObjectsWithCsvBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
