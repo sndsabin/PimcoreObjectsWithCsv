@@ -14,7 +14,7 @@ Requires **pimcore > 5.0** and **pimcore < 5.6**
 
 ### Step 1
 
-- Run `composer require sndsabin/PimcoreObjectsWithCsv`
+- Run `composer require sndsabin/objects-with-csv-bundle`
 
 ### Step 2
 
