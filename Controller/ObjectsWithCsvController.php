@@ -124,6 +124,7 @@ class ObjectsWithCsvController extends FrontendController
                                 $dataObjectsArray[$dataObject->getId()] = [
                                     'id' => $dataObject->getId(),
                                     'fullpath' => $dataObject->getFullPath(),
+                                    'classname' => $dataObject->getClass()->getName(),
                                     'published' => $dataObject->isPublished()
                                 ];
                             }
