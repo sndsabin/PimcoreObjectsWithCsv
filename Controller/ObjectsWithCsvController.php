@@ -71,13 +71,31 @@ class ObjectsWithCsvController extends FrontendController
 
         // fetch objects
         if (is_array($allowedClasses = explode(',', $allowedClass))) {
-            $dataObjectsArray = $this->retrieveDataObjects($allowedClasses, $searchKey, $searchValues);
+            list($dataObjectsArray, $retrievedObjectsIdentifiers) = $this->retrieveDataObjects($allowedClasses, $searchKey, $searchValues);
 
-            return new JsonResponse(['success' => true, 'data' => array_values($dataObjectsArray)], 200);
+            $failedSearches = array_diff($searchValues, $retrievedObjectsIdentifiers);
+
+            if (count($failedSearches)) {
+                $message = count($failedSearches) . ' out of ' . count($searchValues) . ' items not found. so, skipping those missing items.';
+            } else {
+                $message = count($searchValues) . ' out of ' . count($searchValues) . ' items found.';
+            }
+
+
+            return new JsonResponse([
+                'success' => true,
+                'data' => array_values($dataObjectsArray),
+                'message' => $message,
+                'detailedMissingMessage' => count($failedSearches) ? "The following {$searchKey} was not found :" : false,
+                'missingItems' => count($failedSearches) ? $failedSearches : false
+            ], 200, ['content-type' => 'text/html']);
 
         } else {
 
-            return new JsonResponse(['error' => true, 'message' => 'Please upload csv file.'], 418);
+            return new JsonResponse([
+                'error' => true,
+                'message' => 'Please upload csv file.'
+            ], 418);
         }
     }
 
@@ -117,6 +135,7 @@ class ObjectsWithCsvController extends FrontendController
                     $list = new $listName();
                     $list->setCondition($key . " IN ('" . implode("','", $searchValues) . "')");
                     $dataObjects = $list->getObjects();
+                    $retrievedObjectsIdentifiers = [];
 
                     if ($dataObjects) {
                         foreach ($dataObjects as $dataObject) {
@@ -128,6 +147,11 @@ class ObjectsWithCsvController extends FrontendController
                                     'published' => $dataObject->isPublished()
                                 ];
                             }
+
+                            $methodName = 'get' . ucfirst($key);
+                            if (method_exists($dataObject, $methodName)) {
+                                $retrievedObjectsIdentifiers[] = $dataObject->$methodName();
+                            }
                         }
                     }
                 }
@@ -136,6 +160,6 @@ class ObjectsWithCsvController extends FrontendController
 
         }
 
-        return $dataObjectsArray;
+        return [$dataObjectsArray, $retrievedObjectsIdentifiers];
     }
 }

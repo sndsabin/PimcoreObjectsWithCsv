@@ -74,6 +74,19 @@ pimcore.object.tags.objectsWithCsv = Class.create(pimcore.object.tags.objects, {
                                             objRef.addDataFromSelector(objData);
                                             uploadWindowCompatible.close();
 
+                                            var message = Ext.decode(res.response.responseText)['message'];
+                                            uploadWindowCompatible.close();
+
+                                            var missingItems = Ext.decode(res.response.responseText)['missingItems'];
+                                            if (missingItems) {
+                                                var detailedMissingMessage = Ext.decode(res.response.responseText)['detailedMissingMessage'];
+                                                var detailedMessage = pimcore.objectsWithCsv.helpers.listify(missingItems, detailedMissingMessage, true);
+
+                                                pimcore.objectsWithCsv.helpers.showPrettyMessage('info', 'Info', 'Missing Items', message, detailedMessage);
+                                            } else {
+                                                pimcore.helpers.showNotification(t("success"), message, "success");
+                                            }
+
                                         },
                                         failure: function (el, res) {
                                             var message = Ext.decode(res.response.responseText)['message'];
