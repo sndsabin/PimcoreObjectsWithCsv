@@ -127,6 +127,7 @@ class ObjectsWithCsvController extends FrontendController
     protected function retrieveDataObjects($allowedClasses, $key, $searchValues)
     {
         $dataObjectsArray = [];
+        $retrievedObjectsIdentifiers = [];
 
         foreach ($allowedClasses as $class) {
             if (class_exists($className = "\\Pimcore\\Model\\DataObject\\" . ucfirst($class))) {
