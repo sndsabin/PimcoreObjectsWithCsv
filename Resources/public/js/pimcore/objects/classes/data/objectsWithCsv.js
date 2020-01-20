@@ -1,5 +1,5 @@
 pimcore.registerNS('pimcore.object.classes.data.objectsWithCsv');
-pimcore.object.classes.data.objectsWithCsv = Class.create(pimcore.object.classes.data.objects, {
+pimcore.object.classes.data.objectsWithCsv = Class.create(pimcore.object.classes.data.manyToManyObjectRelation, {
     type: 'objectsWithCsv',
 
     initialize: function (treeNode, initData) {
@@ -35,7 +35,7 @@ pimcore.object.classes.data.objectsWithCsv = Class.create(pimcore.object.classes
      * @returns {string}
      */
     getIconClass: function () {
-        return "pimcore_icon_multihref";
+        return "pimcore_icon_manyToManyObjectRelation";
     }
 
 

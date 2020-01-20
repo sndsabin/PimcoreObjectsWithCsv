@@ -24,80 +24,55 @@ pimcore.objectsWithCsv.helpers.listify = function (data, textTobeAttached = null
     return response
 };
 
-pimcore.objectsWithCsv.helpers.showPrettyMessage = function (type, title, text, errorText, stack, code) {
+pimcore.objectsWithCsv.helpers.showPrettyMessage = function (type, title, text, errorText, detailText) {
     // types: info,error,success
-    if (errorText != null && errorText != undefined) {
-        if (t(errorText) != "~" + errorText + "~") {
-            errorText = t(errorText);
-        }
-
-        text = text + '<br /><hr />' +
-            '<span style="font-size:12px">'
-            + '<b>' + errorText + '</b>' +
-            "</span>";
-
-    }
-    if (stack) {
-        stack = str_replace("#", "<br>#", stack);
-        var htmlValue = '<a href="#">' + t("details") + '</a>';
-        var detailedInfo = {
-            xtype: "displayfield",
-            readOnly: true,
-            value: htmlValue,
-            width: 300,
-            listeners: {
-                render: function (c) {
-                    c.getEl().on('click', function () {
-                        var detailedWindow = new Ext.Window({
-                            modal: true,
-                            title: t('details'),
-                            width: 1000,
-                            height: 600,
-                            html: stack,
-                            autoScroll: true,
-                            bodyStyle: "padding: 10px; background:#fff;",
-                            buttonAlign: "center",
-                            shadow: false,
-                            closable: true,
-                            buttons: [{
-                                text: t("OK"),
-                                handler: function () {
-                                    detailedWindow.close();
-                                }
-                            }]
-                        });
-                        detailedWindow.show();
-                    }, c);
-                }.bind(this)
-            }
-        };
+    if (detailText) {
+        detailText =
+            '<pre style="font-size:11px;word-wrap: break-word;">'
+            + detailText +
+            "</pre>";
     }
 
-    if (code) {
-        title = title + " " + code;
-    }
     var errWin = new Ext.Window({
         modal: true,
-        iconCls: 'pimcore_icon_' + type,
+        iconCls: "pimcore_icon_" + type,
         title: title,
-        width: 600,
-
-        layout: 'vbox',
-        items: [
-            {
-                xtype: 'panel',
-                html: text,
-                width: '100%'
-            },
-            detailedInfo
-        ],
+        width: 700,
+        maxHeight: 500,
+        html: text + '<br>' + errorText,
         autoScroll: true,
-        bodyStyle: "padding: 10px; background:#fff;",
+        bodyStyle: "padding: 10px;",
         buttonAlign: "center",
         shadow: false,
         closable: false,
         buttons: [{
-            text: "OK",
+            text: t("details"),
+            hidden: !detailText,
+            handler: function () {
+                errWin.close();
+
+                var detailWindow = new Ext.Window({
+                    modal: true,
+                    title: t('details'),
+                    width: 1000,
+                    height: '95%',
+                    html: detailText,
+                    autoScroll: true,
+                    bodyStyle: "padding: 10px;",
+                    buttonAlign: "center",
+                    shadow: false,
+                    closable: true,
+                    buttons: [{
+                        text: t("OK"),
+                        handler: function () {
+                            detailWindow.close();
+                        }
+                    }]
+                });
+                detailWindow.show();
+            }
+        }, {
+            text: t("OK"),
             handler: function () {
                 errWin.close();
             }
@@ -105,4 +80,21 @@ pimcore.objectsWithCsv.helpers.showPrettyMessage = function (type, title, text, 
     });
     errWin.show();
 
+};
+
+pimcore.objectsWithCsv.helpers.addCsrfTokenToUrl = function (url) {
+
+    // only for /admin urls
+    if(url.indexOf('/admin') !== 0) {
+        return url;
+    }
+
+    if (url.indexOf('?') === -1) {
+        url = url + "?";
+    } else {
+        url = url + "&";
+    }
+    url = url + 'csrfToken=' + pimcore.settings['csrfToken'];
+
+    return url;
 };

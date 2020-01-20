@@ -8,9 +8,9 @@
 
 namespace ObjectsWithCsvBundle\Model\DataObject\ClassDefinition\Data;
 
-use Pimcore\Model\DataObject\ClassDefinition\Data\Objects;
+use Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyObjectRelation;
 
-class ObjectsWithCsv extends Objects
+class ObjectsWithCsv extends ManyToManyObjectRelation
 {
     public $fieldtype = 'objectsWithCsv';
 }
