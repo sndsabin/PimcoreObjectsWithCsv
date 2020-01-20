@@ -1,5 +1,5 @@
 pimcore.registerNS('pimcore.object.tags.objectsWithCsv');
-pimcore.object.tags.objectsWithCsv = Class.create(pimcore.object.tags.objects, {
+pimcore.object.tags.objectsWithCsv = Class.create(pimcore.object.tags.manyToManyObjectRelation, {
     type: "objectsWithCsv",
     getEditToolbarItems: function () {
         var toolbarItems = [
@@ -21,7 +21,7 @@ pimcore.object.tags.objectsWithCsv = Class.create(pimcore.object.tags.objects, {
             },
             {
                 xtype: "button",
-                icon: '/bundles/objectswithcsv/img/csv-import.svg',
+                icon: '/bundles/objectswithcsv/img/upload.svg',
                 handler: function () {
                     var objRef = this;
                     var uploadWindowCompatible = new Ext.Window({
@@ -32,9 +32,7 @@ pimcore.object.tags.objectsWithCsv = Class.create(pimcore.object.tags.objects, {
                         modal: true
                     });
 
-                    var url = '/admin/objects-with-csv/parse';
-                    url = pimcore.helpers.addCsrfTokenToUrl(url);
-                    
+                    var url = pimcore.objectsWithCsv.helpers.addCsrfTokenToUrl('/admin/objects-with-csv/parse');
                     var allowedClass = '';
 
                     this.fieldConfig.classes.forEach(function (data) {
