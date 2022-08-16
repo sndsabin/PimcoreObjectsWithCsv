@@ -17,9 +17,7 @@ class ObjectsWithCsvController extends FrontendController
     /**
      * @inheritDoc
      */
-    public function __construct(protected CsvParser $csvParser)
-    {
-    }
+    public function __construct(protected CsvParser $csvParser){}
     /**
      * @Route("/parse", methods={"POST"})
      *
