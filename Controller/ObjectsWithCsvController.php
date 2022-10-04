@@ -2,6 +2,7 @@
 
 namespace ObjectsWithCsvBundle\Controller;
 
+use ObjectsWithCsvBundle\Service\CsvParser;
 use Pimcore\Controller\FrontendController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,6 +14,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class ObjectsWithCsvController extends FrontendController
 {
+    /**
+     * @inheritDoc
+     */
+    public function __construct(protected CsvParser $csvParser){}
     /**
      * @Route("/parse", methods={"POST"})
      *
@@ -43,14 +48,11 @@ class ObjectsWithCsvController extends FrontendController
     {
         if (in_array(pathinfo($_FILES['csv-upload']['name'], PATHINFO_EXTENSION), ['csv'])) {
             $file = $_FILES['csv-upload']['tmp_name'];
-            $csvParser = $this->get('objects_with_csv.csv_parser');
-            $csvData = $csvParser->parseFile($file);
+            $csvData = $this->csvParser->parseFile($file);
 
             if ($csvData) {
                 return $this->processCsvData($csvData, $allowedClass);
             }
-
-
         } else {
             return new JsonResponse(['error' => true, 'message' => 'No file was found.'], 400);
         }
