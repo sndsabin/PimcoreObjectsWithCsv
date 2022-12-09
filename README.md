@@ -10,7 +10,7 @@ Facilitates user to upload csv file for bulk attaching to objects datatype using
 
 ## Prerequisite
 
-Requires **pimcore > 5.6**
+Requires **pimcore >=10.0.0**
 
 ### Step 1
 
